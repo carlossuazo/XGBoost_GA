@@ -11,6 +11,25 @@ from datetime import datetime
 MODEL_TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
 GA_SCORES_PATH  = 'GA_Scores/'
 REPORTS_PATH = 'Reports/'
+HYPERPARAMS_PATH = 'Hyperparams/'
+
+
+# # Common methods
+
+# In[5]:
+
+
+import json
+
+def write_json(feature_vector, root_path, file_name):
+    with open(root_path + file_name, 'w') as outfile:
+        json.dump(feature_vector, outfile)
+
+def load_json(root_path, file_name):
+    with open(root_path + file_name) as json_file:
+        data = json.load(json_file)
+
+    return data
 
 
 # # 1 - Imports
@@ -570,13 +589,13 @@ def mutation(crossover, numberOfParameters):
 
     if parameterSelect == 0: # learning_rate
         # mutationValue = round(np.random.uniform(-0.2, 0.2), 2)
-        mutationValue = round(random.uniform(0.01, 1), 2)
+        mutationValue = round(random.uniform(-0.1, 0.1), 3)
     if parameterSelect == 1: # max_depth
         # mutationValue = np.random.randint(-3, 3, 1)
-        mutationValue = int(random.randrange(1, 20, step= 1))
+        mutationValue = int(random.randrange(-3, 3, step= 1))
     if parameterSelect == 2: # min_child_weight
         # mutationValue = round(np.random.uniform(5, 5), 2)
-        mutationValue = round(random.uniform(0.01, 15.0), 1)
+        mutationValue = round(random.uniform(-5, 5), 1)
 
 
     # Introduce mutation by changing one parameter, and set to max or min if it goes out of range
@@ -674,8 +693,6 @@ fitnessHistory[generation+1, :] = fitness # index of the best solution
 bestFitnessIndex = np.where(fitness == np.max(fitness))[0][0]
 
 
-# 
-
 # In[ ]:
 
 
@@ -693,6 +710,15 @@ plt.plot(np.arange(len(x_fitness)), x_fitness)
 plt.savefig(GA_SCORES_PATH + FILE_NAME)
 
 
+# In[ ]:
+
+
+FILE_NAME = 'hyperparams_' + MODEL_TIMESTAMP + '.json'
+
+write_json(best_hyperparams, HYPERPARAMS_PATH, FILE_NAME)
+print(best_hyperparams)
+
+
 # ## Train XGBoost with Besthyperparams
 
 # In[ ]:
@@ -700,13 +726,13 @@ plt.savefig(GA_SCORES_PATH + FILE_NAME)
 
 from xgboost import XGBClassifier
 
-xgboost = XGBClassifier(eta = 0.78,
-                        max_depth = 15,
-                        min_child_weight = 0.8,
-                        tree_method = 'gpu_hist')
-
-# xgboost = XGBClassifier(best_hyperparams,
+# xgboost = XGBClassifier(eta = 0.78,
+#                         max_depth = 15,
+#                         min_child_weight = 0.8,
 #                         tree_method = 'gpu_hist')
+
+xgboost = XGBClassifier(best_hyperparams,
+                        tree_method = 'gpu_hist')
 
 xgboost.fit(X_train, y_train)
 
