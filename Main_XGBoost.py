@@ -126,48 +126,48 @@ print(type(Extracted_Embeddings))
 # In[ ]:
 
 
-# load the embeddings
-print("[INFO] loading pictures embeddings...")
-data = pickle.loads(open("embeddings.pickle", "rb").read())
+# # load the embeddings
+# print("[INFO] loading pictures embeddings...")
+# data = pickle.loads(open("embeddings.pickle", "rb").read())
 
-# encode the labels
-print("[INFO] encoding labels...")
-le = LabelEncoder()
-labels = le.fit_transform(data["names"])
-print(labels)
-# dividing in train and test data
-X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
+# # encode the labels
+# print("[INFO] encoding labels...")
+# le = LabelEncoder()
+# labels = le.fit_transform(data["names"])
+# print(labels)
+# # dividing in train and test data
+# X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
 
-# train the model used to accept the 3806-d embeddings of the pedestrian and
-# then produce the actual pedestrain recognition
-print("[INFO] training model...")
+# # train the model used to accept the 3806-d embeddings of the pedestrian and
+# # then produce the actual pedestrain recognition
+# print("[INFO] training model...")
 
-xgboost = XGBClassifier()
-xgboost.fit(X_train, y_train)
+# xgboost = XGBClassifier()
+# xgboost.fit(X_train, y_train)
 
 
-print("Accuracy on training set: {:.3f}".format(xgboost.score(X_train, y_train)))
-print("Accuracy on validation set: {:.3f}".format(xgboost.score(X_test, y_test)))
+# print("Accuracy on training set: {:.3f}".format(xgboost.score(X_train, y_train)))
+# print("Accuracy on validation set: {:.3f}".format(xgboost.score(X_test, y_test)))
 
-# write the actual face recognition model to disk
-f = open("classifier.pickle", "wb")
-f.write(pickle.dumps(xgboost))
-f.close()
+# # write the actual face recognition model to disk
+# f = open("classifier.pickle", "wb")
+# f.write(pickle.dumps(xgboost))
+# f.close()
 
-# write the label encoder to disk
-f = open("le.pickle", "wb")
-f.write(pickle.dumps(le))
-f.close()
+# # write the label encoder to disk
+# f = open("le.pickle", "wb")
+# f.write(pickle.dumps(le))
+# f.close()
 
 
 # In[ ]:
 
 
-xgb_predict = xgboost.predict(X_test)
-xgb_predict
+# xgb_predict = xgboost.predict(X_test)
+# xgb_predict
 
-print(confusion_matrix(y_test,xgb_predict))
-print(classification_report(y_test,xgb_predict))
+# print(confusion_matrix(y_test,xgb_predict))
+# print(classification_report(y_test,xgb_predict))
 
 
 # In[ ]:
@@ -441,7 +441,7 @@ from sklearn.metrics import roc_curve, auc
 
 def fitness_f1score(y_true, y_pred):
 
-    fpr, tpr, thresholds = roc_curve(y, pred, pos_label=2)
+    fpr, tpr, thresholds = roc_curve(y_true, pred, pos_label=2)
     
     fitness = round(auc(fpr, tpr), 4)
 
