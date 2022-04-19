@@ -696,27 +696,27 @@ def mutation(crossover, numberOfParameters):
 # In[ ]:
 
 
-x_fitness = [np.max(fitnessHistory[i]) for i in range(0,fitnessHistory.shape[0])]
+# x_fitness = [np.max(fitnessHistory[i]) for i in range(0,fitnessHistory.shape[0])]
 
-best_hyperparams = {}
-best_hyperparams['eta'] = population[bestFitnessIndex][0]
-best_hyperparams['max_depth'] = int(population[bestFitnessIndex][1])
-best_hyperparams['min_child_weight'] = population[bestFitnessIndex][2]
+# best_hyperparams = {}
+# best_hyperparams['eta'] = population[bestFitnessIndex][0]
+# best_hyperparams['max_depth'] = int(population[bestFitnessIndex][1])
+# best_hyperparams['min_child_weight'] = population[bestFitnessIndex][2]
 
-FILE_NAME = 'XGBoost_' + MODEL_TIMESTAMP  + '.jpg'
+# FILE_NAME = 'XGBoost_' + MODEL_TIMESTAMP  + '.jpg'
 
-plt.figure(figsize=(10, 5))
-plt.plot(np.arange(len(x_fitness)), x_fitness)
-plt.savefig(GA_SCORES_PATH + FILE_NAME)
+# plt.figure(figsize=(10, 5))
+# plt.plot(np.arange(len(x_fitness)), x_fitness)
+# plt.savefig(GA_SCORES_PATH + FILE_NAME)
 
 
 # In[ ]:
 
 
-FILE_NAME = 'hyperparams_' + MODEL_TIMESTAMP + '.json'
+# FILE_NAME = 'hyperparams_' + MODEL_TIMESTAMP + '.json'
 
-write_json(best_hyperparams, HYPERPARAMS_PATH, FILE_NAME)
-print(best_hyperparams)
+# write_json(best_hyperparams, HYPERPARAMS_PATH, FILE_NAME)
+# print(best_hyperparams)
 
 
 # ## Train XGBoost with Besthyperparams
