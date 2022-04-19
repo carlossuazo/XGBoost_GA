@@ -727,8 +727,8 @@ def mutation(crossover, numberOfParameters):
 from xgboost import XGBClassifier
 
 xgboost = XGBClassifier(eta = 0.376,
-                        max_depth = 5,
-                        min_child_weight = 41,
+                        max_depth = 41,
+                        min_child_weight = 5,
                         tree_method = 'gpu_hist')
 
 # xgboost = XGBClassifier(eta = best_hyperparams['eta'],
