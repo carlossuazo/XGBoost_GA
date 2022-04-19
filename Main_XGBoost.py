@@ -613,7 +613,7 @@ def mutation(crossover, numberOfParameters):
 
 # ## Main Function
 
-# In[6]:
+# In[4]:
 
 
 # from sklearn.preprocessing import StandardScaler
@@ -634,7 +634,7 @@ import random
 numberOfParents = 30 # number of parents to start
 numberOfParentsMating = 15 # Number of parents that will mate
 numberOfParameters = 3  # Number of parameters that will be optimized
-numberOfGenerations = 30 # Number of genration that will be created 
+numberOfGenerations = 1 # Number of genration that will be created 
 
 # Define the population size
 populationSize = (numberOfParents, numberOfParameters) # initialize the population with randomly generated parameters
@@ -731,7 +731,9 @@ from xgboost import XGBClassifier
 #                         min_child_weight = 0.8,
 #                         tree_method = 'gpu_hist')
 
-xgboost = XGBClassifier(best_hyperparams,
+xgboost = XGBClassifier(eta = best_hyperparams[0]
+                        max_depth = best_hyperparams[1],
+                        min_child_weight = best_hyperparams[2],
                         tree_method = 'gpu_hist')
 
 xgboost.fit(X_train, y_train)
