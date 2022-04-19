@@ -126,17 +126,17 @@ print(type(Extracted_Embeddings))
 # In[ ]:
 
 
-# # load the embeddings
-# print("[INFO] loading pictures embeddings...")
-# data = pickle.loads(open("embeddings.pickle", "rb").read())
+# load the embeddings
+print("[INFO] loading pictures embeddings...")
+data = pickle.loads(open("embeddings.pickle", "rb").read())
 
-# # encode the labels
-# print("[INFO] encoding labels...")
-# le = LabelEncoder()
-# labels = le.fit_transform(data["names"])
-# print(labels)
-# # dividing in train and test data
-# X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
+# encode the labels
+print("[INFO] encoding labels...")
+le = LabelEncoder()
+labels = le.fit_transform(data["names"])
+print(labels)
+# dividing in train and test data
+X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
 
 # # train the model used to accept the 3806-d embeddings of the pedestrian and
 # # then produce the actual pedestrain recognition
