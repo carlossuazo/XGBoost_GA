@@ -434,7 +434,7 @@ def initilialize_poplulation(numberOfParents):
 
 # ## Fitness Function
 
-# In[1]:
+# In[2]:
 
 
 from sklearn.metrics import roc_curve, auc
@@ -450,7 +450,7 @@ def fitness_f1score(y_true, y_pred):
 
 # ## Evaluate Population
 
-# In[ ]:
+# In[3]:
 
 
 from xgboost import XGBClassifier
@@ -481,7 +481,7 @@ def train_population(population, dMatrixTrain, dMatrixTest, y_test):
                 }
 
         num_round = 100
-        xgboost.set_config(verbosity=0)
+        xgb.set_config(verbosity=0)
         xgbT = xgb.train(param,
                          dMatrixTrain,
                          num_round)
@@ -594,7 +594,7 @@ def mutation(crossover, numberOfParameters):
 
 # ## Main Function
 
-# In[ ]:
+# In[4]:
 
 
 # from sklearn.preprocessing import StandardScaler
