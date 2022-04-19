@@ -613,7 +613,7 @@ def mutation(crossover, numberOfParameters):
 
 # ## Main Function
 
-# In[4]:
+# In[6]:
 
 
 # from sklearn.preprocessing import StandardScaler
@@ -631,10 +631,10 @@ import random
 
 # X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
 
-numberOfParents = 20 # number of parents to start
-numberOfParentsMating = 10 # Number of parents that will mate
+numberOfParents = 30 # number of parents to start
+numberOfParentsMating = 15 # Number of parents that will mate
 numberOfParameters = 3  # Number of parameters that will be optimized
-numberOfGenerations = 15 # Number of genration that will be created 
+numberOfGenerations = 30 # Number of genration that will be created 
 
 # Define the population size
 populationSize = (numberOfParents, numberOfParameters) # initialize the population with randomly generated parameters
