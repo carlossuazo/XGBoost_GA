@@ -50,7 +50,7 @@ from xgboost import XGBClassifier
 # In[ ]:
 
 
-ROOT_PATH  = '/data/INRIAPerson'
+ROOT_PATH  = './data/INRIAPerson'
 TRAIN_PATH = '/Train/'
 
 ext = ['png', 'jpg', 'gif']    # Add image formats here
@@ -134,7 +134,7 @@ data = pickle.loads(open("embeddings.pickle", "rb").read())
 print("[INFO] encoding labels...")
 le = LabelEncoder()
 labels = le.fit_transform(data["names"])
-
+print(labels)
 # dividing in train and test data
 X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
 
