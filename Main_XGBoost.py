@@ -616,81 +616,81 @@ def mutation(crossover, numberOfParameters):
 # In[4]:
 
 
-# from sklearn.preprocessing import StandardScaler
+# # from sklearn.preprocessing import StandardScaler
 
-# sc = StandardScaler()
-# X_train = sc.fit_transform(X_train)
-# X_test  = sc.transform(X_test)
+# # sc = StandardScaler()
+# # X_train = sc.fit_transform(X_train)
+# # X_test  = sc.transform(X_test)
 
-# XGboost Classifier
-# model xgboost
-# use xgboost API now
+# # XGboost Classifier
+# # model xgboost
+# # use xgboost API now
 
-import xgboost as xgb
-import random
+# import xgboost as xgb
+# import random
 
-# X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
+# # X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
 
-numberOfParents = 40 # number of parents to start
-numberOfParentsMating = 20 # Number of parents that will mate
-numberOfParameters = 3  # Number of parameters that will be optimized
-numberOfGenerations = 100 # Number of genration that will be created 
+# numberOfParents = 40 # number of parents to start
+# numberOfParentsMating = 20 # Number of parents that will mate
+# numberOfParameters = 3  # Number of parameters that will be optimized
+# numberOfGenerations = 100 # Number of genration that will be created 
 
-# Define the population size
-populationSize = (numberOfParents, numberOfParameters) # initialize the population with randomly generated parameters
+# # Define the population size
+# populationSize = (numberOfParents, numberOfParameters) # initialize the population with randomly generated parameters
 
-population = initilialize_poplulation(numberOfParents) # Define an array to store the fitness  hitory
-fitnessHistory = np.empty([numberOfGenerations+1, numberOfParents]) # Define an array to store the value of each parameter for each parent and generation
-populationHistory = np.empty([(numberOfGenerations+1)*numberOfParents, numberOfParameters]) # Insert the value of initial parameters in history
+# population = initilialize_poplulation(numberOfParents) # Define an array to store the fitness  hitory
+# fitnessHistory = np.empty([numberOfGenerations+1, numberOfParents]) # Define an array to store the value of each parameter for each parent and generation
+# populationHistory = np.empty([(numberOfGenerations+1)*numberOfParents, numberOfParameters]) # Insert the value of initial parameters in history
 
-populationHistory[0:numberOfParents, :] = population
+# populationHistory[0:numberOfParents, :] = population
 
-for generation in range(numberOfGenerations):
-    print("This is number %s generation" % (generation))
+# for generation in range(numberOfGenerations):
+#     print("This is number %s generation" % (generation))
 
-    xgbDMatrixTrain = xgb.DMatrix(data = X_train, label = y_train)
-    xgbDMatrixTest  = xgb.DMatrix(data = X_test, label = y_test)
+#     xgbDMatrixTrain = xgb.DMatrix(data = X_train, label = y_train)
+#     xgbDMatrixTest  = xgb.DMatrix(data = X_test, label = y_test)
     
-    # Train the dataset and obtain fitness
-    fitnessValue = train_population(population = population,
-                                    dMatrixTrain = xgbDMatrixTrain,
-                                    dMatrixTest =  xgbDMatrixTest,
-                                    y_test = y_test)
+#     # Train the dataset and obtain fitness
+#     fitnessValue = train_population(population = population,
+#                                     dMatrixTrain = xgbDMatrixTrain,
+#                                     dMatrixTest =  xgbDMatrixTest,
+#                                     y_test = y_test)
 
-    fitnessHistory[generation, :] = fitnessValue
+#     fitnessHistory[generation, :] = fitnessValue
     
-    # Best score in the current iteration
-    print('Best F1 score in the this iteration = {}'.format(np.max(fitnessHistory[generation, :]))) # Survival of the fittest - take the top parents, based on the fitness value and number of parents needed to be selected
+#     # Best score in the current iteration
+#     print('Best F1 score in the this iteration = {}'.format(np.max(fitnessHistory[generation, :]))) # Survival of the fittest - take the top parents, based on the fitness value and number of parents needed to be selected
     
-    parents = new_parents_selection(population = population,
-                                    fitness = fitnessValue,
-                                    numParents = numberOfParentsMating)
+#     parents = new_parents_selection(population = population,
+#                                     fitness = fitnessValue,
+#                                     numParents = numberOfParentsMating)
     
-    # Mate these parents to create children having parameters from these parents (we are using uniform crossover)
-    children = crossover_uniform(parents = parents,
-                                 childrenSize = (populationSize[0] - parents.shape[0], numberOfParameters))
+#     # Mate these parents to create children having parameters from these parents (we are using uniform crossover)
+#     children = crossover_uniform(parents = parents,
+#                                  childrenSize = (populationSize[0] - parents.shape[0], numberOfParameters))
     
-    # Add mutation to create genetic diversity
-    children_mutated = mutation(children, numberOfParameters)
+#     # Add mutation to create genetic diversity
+#     children_mutated = mutation(children, numberOfParameters)
     
-    '''
-    We will create new population, which will contain parents that where selected previously based on the
-    fitness score and rest of them  will be children
-    '''
-    population[0:parents.shape[0], :] = parents # Fittest parents
-    population[parents.shape[0]:, :] = children_mutated # Children
+#     '''
+#     We will create new population, which will contain parents that where selected previously based on the
+#     fitness score and rest of them  will be children
+#     '''
+#     population[0:parents.shape[0], :] = parents # Fittest parents
+#     population[parents.shape[0]:, :] = children_mutated # Children
     
-    populationHistory[(generation+1)*numberOfParents : (generation+1)*numberOfParents+ numberOfParents , :] = population # Srore parent information
+#     populationHistory[(generation+1)*numberOfParents : (generation+1)*numberOfParents+ numberOfParents , :] = population # Srore parent information
     
-#Best solution from the final iteration
+# #Best solution from the final iteration
 
-fitness = train_population(population = population,
-                           dMatrixTrain = xgbDMatrixTrain,
-                           dMatrixTest  = xgbDMatrixTest,
-                           y_test = y_test)
+# fitness = train_population(population = population,
+#                            dMatrixTrain = xgbDMatrixTrain,
+#                            dMatrixTest  = xgbDMatrixTest,
+#                            y_test = y_test)
 
-fitnessHistory[generation+1, :] = fitness # index of the best solution
-bestFitnessIndex = np.where(fitness == np.max(fitness))[0][0]
+# fitnessHistory[generation+1, :] = fitness # index of the best solution
+# bestFitnessIndex = np.where(fitness == np.max(fitness))[0][0]
 
 
 # In[ ]:
@@ -726,15 +726,15 @@ print(best_hyperparams)
 
 from xgboost import XGBClassifier
 
-# xgboost = XGBClassifier(eta = 0.78,
-#                         max_depth = 15,
-#                         min_child_weight = 0.8,
-#                         tree_method = 'gpu_hist')
-
-xgboost = XGBClassifier(eta = best_hyperparams['eta'],
-                        max_depth = best_hyperparams['max_depth'],
-                        min_child_weight = best_hyperparams['min_child_weight'],
+xgboost = XGBClassifier(eta = 0.376,
+                        max_depth = 5,
+                        min_child_weight = 41,
                         tree_method = 'gpu_hist')
+
+# xgboost = XGBClassifier(eta = best_hyperparams['eta'],
+#                         max_depth = best_hyperparams['max_depth'],
+#                         min_child_weight = best_hyperparams['min_child_weight'],
+#                         tree_method = 'gpu_hist')
 
 xgboost.fit(X_train, y_train)
 
