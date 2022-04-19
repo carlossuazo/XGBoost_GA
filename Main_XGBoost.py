@@ -731,9 +731,9 @@ from xgboost import XGBClassifier
 #                         min_child_weight = 0.8,
 #                         tree_method = 'gpu_hist')
 
-xgboost = XGBClassifier(eta = best_hyperparams[0]
-                        max_depth = best_hyperparams[1],
-                        min_child_weight = best_hyperparams[2],
+xgboost = XGBClassifier(eta = best_hyperparams['eta'],
+                        max_depth = best_hyperparams['max_depth'],
+                        min_child_weight = best_hyperparams['min_child_weight'],
                         tree_method = 'gpu_hist')
 
 xgboost.fit(X_train, y_train)
