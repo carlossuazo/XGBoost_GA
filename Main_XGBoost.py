@@ -631,10 +631,10 @@ import random
 
 # X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
 
-numberOfParents = 30 # number of parents to start
-numberOfParentsMating = 15 # Number of parents that will mate
+numberOfParents = 40 # number of parents to start
+numberOfParentsMating = 20 # Number of parents that will mate
 numberOfParameters = 3  # Number of parameters that will be optimized
-numberOfGenerations = 1 # Number of genration that will be created 
+numberOfGenerations = 100 # Number of genration that will be created 
 
 # Define the population size
 populationSize = (numberOfParents, numberOfParameters) # initialize the population with randomly generated parameters
