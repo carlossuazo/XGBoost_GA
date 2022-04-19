@@ -441,7 +441,7 @@ from sklearn.metrics import roc_curve, auc
 
 def fitness_f1score(y_true, y_pred):
 
-    fpr, tpr, thresholds = roc_curve(y_true, y_pred, pos_label=2)
+    fpr, tpr, thresholds = roc_curve(y_true, y_pred, pos_label=1)
     
     fitness = round(auc(fpr, tpr), 4)
 
