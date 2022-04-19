@@ -434,14 +434,16 @@ def initilialize_poplulation(numberOfParents):
 
 # ## Fitness Function
 
-# In[ ]:
+# In[1]:
 
 
-from sklearn.metrics import f1_score
+from sklearn.metrics import roc_curve, auc
 
 def fitness_f1score(y_true, y_pred):
 
-    fitness = round((f1_score(y_true, y_pred, average='micro')), 4)
+    fpr, tpr, thresholds = roc_curve(y, pred, pos_label=2)
+    
+    fitness = round(auc(fpr, tpr), 4)
 
     return fitness # Train the data annd find fitness score
 
@@ -479,7 +481,7 @@ def train_population(population, dMatrixTrain, dMatrixTest, y_test):
                 }
 
         num_round = 100
-        # xgboost.set_config(verbosity=0)
+        xgboost.set_config(verbosity=0)
         xgbT = xgb.train(param,
                          dMatrixTrain,
                          num_round)
