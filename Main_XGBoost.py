@@ -3,7 +3,7 @@
 
 # # Routes
 
-# In[ ]:
+# In[1]:
 
 
 from datetime import datetime
@@ -16,7 +16,7 @@ HYPERPARAMS_PATH = 'Hyperparams/'
 
 # # Common methods
 
-# In[5]:
+# In[2]:
 
 
 import json
@@ -35,7 +35,7 @@ def load_json(root_path, file_name):
 # # 1 - Imports
 # 
 
-# In[ ]:
+# In[3]:
 
 
 import cv2
@@ -453,7 +453,7 @@ def initilialize_poplulation(numberOfParents):
 
 # ## Fitness Function
 
-# In[2]:
+# In[ ]:
 
 
 from sklearn.metrics import roc_curve, auc
@@ -469,7 +469,7 @@ def fitness_f1score(y_true, y_pred):
 
 # ## Evaluate Population
 
-# In[3]:
+# In[ ]:
 
 
 from xgboost import XGBClassifier
@@ -523,13 +523,37 @@ def train_population(population, dMatrixTrain, dMatrixTest, y_test):
 # Select parents for mating
 def new_parents_selection(population, fitness, numParents):
     selectedParents = np.empty((numParents, population.shape[1])) # Create an array to store fittest parents.
-    
-    # Find the top best performing parents
-    for parentId in range(numParents):
-        bestFitnessId = np.where(fitness == np.max(fitness))
-        bestFitnessId  = bestFitnessId[0][0]
-        selectedParents[parentId, :] = population[bestFitnessId, :]
-        fitness[bestFitnessId] = -1 # Set this value to negative, in case of F1-score, so this parent is not selected again
+
+
+    current_population = population
+    current_fitness = fitness
+
+    current_selected_parents_number = 0
+
+    while current_selected_parents_number < numParents:
+        print(f'Number of parents selected: {current_selected_parents_number}')
+        population_fitness = np.sum(current_fitness)
+
+        individuals_probability_to_be_selected = current_fitness/population_fitness
+
+        
+        random_number = random.uniform(0,1)
+
+        for parentId in range(numParents): 
+            if sum(individuals_probability_to_be_selected[:parentId]) > random_number:
+                selectedParents[parentId, :] = current_population[parentId,:]
+                current_population = np.delete(current_population, parentId,0)
+                current_fitness = np.delete(current_fitness, parentId,0)
+                current_selected_parents_number += 1
+                break
+            
+
+        # for parentId in range(numParents):
+        #     bestFitnessId = np.where(fitness == np.max(fitness))
+        #     bestFitnessId  = bestFitnessId[0][0]
+        #     selectedParents[parentId, :] = population[bestFitnessId, :]
+        #     fitness[bestFitnessId] = -1 # Set this value to negative, in case of F1-score, so this parent is not selected again
+
 
     return selectedParents
 
@@ -613,84 +637,84 @@ def mutation(crossover, numberOfParameters):
 
 # ## Main Function
 
-# In[4]:
+# In[ ]:
 
 
-# # from sklearn.preprocessing import StandardScaler
+# from sklearn.preprocessing import StandardScaler
 
-# # sc = StandardScaler()
-# # X_train = sc.fit_transform(X_train)
-# # X_test  = sc.transform(X_test)
+# sc = StandardScaler()
+# X_train = sc.fit_transform(X_train)
+# X_test  = sc.transform(X_test)
 
-# # XGboost Classifier
-# # model xgboost
-# # use xgboost API now
+# XGboost Classifier
+# model xgboost
+# use xgboost API now
 
-# import xgboost as xgb
-# import random
+import xgboost as xgb
+import random
 
-# # X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
+# X_train, X_test, y_train, y_test = train_test_split(data["embeddings"], labels, test_size=0.20)
 
-# numberOfParents = 40 # number of parents to start
-# numberOfParentsMating = 20 # Number of parents that will mate
-# numberOfParameters = 3  # Number of parameters that will be optimized
-# numberOfGenerations = 100 # Number of genration that will be created 
+numberOfParents = 40 # number of parents to start
+numberOfParentsMating = 20 # Number of parents that will mate
+numberOfParameters = 3  # Number of parameters that will be optimized
+numberOfGenerations = 100 # Number of genration that will be created 
 
-# # Define the population size
-# populationSize = (numberOfParents, numberOfParameters) # initialize the population with randomly generated parameters
+# Define the population size
+populationSize = (numberOfParents, numberOfParameters) # initialize the population with randomly generated parameters
 
-# population = initilialize_poplulation(numberOfParents) # Define an array to store the fitness  hitory
-# fitnessHistory = np.empty([numberOfGenerations+1, numberOfParents]) # Define an array to store the value of each parameter for each parent and generation
-# populationHistory = np.empty([(numberOfGenerations+1)*numberOfParents, numberOfParameters]) # Insert the value of initial parameters in history
+population = initilialize_poplulation(numberOfParents) # Define an array to store the fitness  hitory
+fitnessHistory = np.empty([numberOfGenerations+1, numberOfParents]) # Define an array to store the value of each parameter for each parent and generation
+populationHistory = np.empty([(numberOfGenerations+1)*numberOfParents, numberOfParameters]) # Insert the value of initial parameters in history
 
-# populationHistory[0:numberOfParents, :] = population
+populationHistory[0:numberOfParents, :] = population
 
-# for generation in range(numberOfGenerations):
-#     print("This is number %s generation" % (generation))
+for generation in range(numberOfGenerations):
+    print("This is number %s generation" % (generation))
 
-#     xgbDMatrixTrain = xgb.DMatrix(data = X_train, label = y_train)
-#     xgbDMatrixTest  = xgb.DMatrix(data = X_test, label = y_test)
+    xgbDMatrixTrain = xgb.DMatrix(data = X_train, label = y_train)
+    xgbDMatrixTest  = xgb.DMatrix(data = X_test, label = y_test)
     
-#     # Train the dataset and obtain fitness
-#     fitnessValue = train_population(population = population,
-#                                     dMatrixTrain = xgbDMatrixTrain,
-#                                     dMatrixTest =  xgbDMatrixTest,
-#                                     y_test = y_test)
+    # Train the dataset and obtain fitness
+    fitnessValue = train_population(population = population,
+                                    dMatrixTrain = xgbDMatrixTrain,
+                                    dMatrixTest =  xgbDMatrixTest,
+                                    y_test = y_test)
 
-#     fitnessHistory[generation, :] = fitnessValue
+    fitnessHistory[generation, :] = fitnessValue
     
-#     # Best score in the current iteration
-#     print('Best F1 score in the this iteration = {}'.format(np.max(fitnessHistory[generation, :]))) # Survival of the fittest - take the top parents, based on the fitness value and number of parents needed to be selected
+    # Best score in the current iteration
+    print('Best F1 score in the this iteration = {}'.format(np.max(fitnessHistory[generation, :]))) # Survival of the fittest - take the top parents, based on the fitness value and number of parents needed to be selected
     
-#     parents = new_parents_selection(population = population,
-#                                     fitness = fitnessValue,
-#                                     numParents = numberOfParentsMating)
+    parents = new_parents_selection(population = population,
+                                    fitness = fitnessValue,
+                                    numParents = numberOfParentsMating)
     
-#     # Mate these parents to create children having parameters from these parents (we are using uniform crossover)
-#     children = crossover_uniform(parents = parents,
-#                                  childrenSize = (populationSize[0] - parents.shape[0], numberOfParameters))
+    # Mate these parents to create children having parameters from these parents (we are using uniform crossover)
+    children = crossover_uniform(parents = parents,
+                                 childrenSize = (populationSize[0] - parents.shape[0], numberOfParameters))
     
-#     # Add mutation to create genetic diversity
-#     children_mutated = mutation(children, numberOfParameters)
+    # Add mutation to create genetic diversity
+    children_mutated = mutation(children, numberOfParameters)
     
-#     '''
-#     We will create new population, which will contain parents that where selected previously based on the
-#     fitness score and rest of them  will be children
-#     '''
-#     population[0:parents.shape[0], :] = parents # Fittest parents
-#     population[parents.shape[0]:, :] = children_mutated # Children
+    '''
+    We will create new population, which will contain parents that where selected previously based on the
+    fitness score and rest of them  will be children
+    '''
+    population[0:parents.shape[0], :] = parents # Fittest parents
+    population[parents.shape[0]:, :] = children_mutated # Children
     
-#     populationHistory[(generation+1)*numberOfParents : (generation+1)*numberOfParents+ numberOfParents , :] = population # Srore parent information
+    populationHistory[(generation+1)*numberOfParents : (generation+1)*numberOfParents+ numberOfParents , :] = population # Srore parent information
     
-# #Best solution from the final iteration
+#Best solution from the final iteration
 
-# fitness = train_population(population = population,
-#                            dMatrixTrain = xgbDMatrixTrain,
-#                            dMatrixTest  = xgbDMatrixTest,
-#                            y_test = y_test)
+fitness = train_population(population = population,
+                           dMatrixTrain = xgbDMatrixTrain,
+                           dMatrixTest  = xgbDMatrixTest,
+                           y_test = y_test)
 
-# fitnessHistory[generation+1, :] = fitness # index of the best solution
-# bestFitnessIndex = np.where(fitness == np.max(fitness))[0][0]
+fitnessHistory[generation+1, :] = fitness # index of the best solution
+bestFitnessIndex = np.where(fitness == np.max(fitness))[0][0]
 
 
 # In[ ]:
